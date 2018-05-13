@@ -1,0 +1,81 @@
+.calendar
+	&__wrapper
+		display grid
+		grid-template-columns repeat(7, 1fr)
+		grid-gap 2px
+
+	&__day-wrapper
+		position relative
+		width 100%
+		background-color white
+		box-shadow 0 0 2px #dedede
+
+		^[1]_active
+			z-index 1
+			box-shadow 0 0 4px rgb(26, 155, 255)
+
+		&::before
+			padding-top 100%
+			display block
+			content ''
+
+		&:hover, &:active, &:focus
+			z-index 1
+			box-shadow 0 0 4px rgb(26, 155, 255)
+
+.calendar-day
+	padding 10px
+	overflow hidden
+	font-size 14px
+
+	+mobile()
+		padding 6px
+    
+	position absolute
+	top 0
+	right 0
+	left 0
+	bottom 0
+
+	&__when
+		margin-bottom 10px
+		display block
+		color #999999
+
+		+below(container-sm-width)
+			display none
+
+	&__when_short
+		margin-bottom 10px
+		display block
+		color #999999
+
+		+from-width(container-sm-width)
+			display none
+
+		+below(container-sm-width)
+			display block
+
+	&__what
+		margin-bottom 8px
+		display block
+		font-weight bold
+
+		+below(container-sm-width)
+			display none
+
+	&__who
+		+below(container-sm-width)
+			display none
+
+	&_has-event
+		border-bottom 10px solid #c2e4fe
+
+		+mobile()
+			border-bottom 6px solid #c2e4fe
+
+		background-color #c2e4fe
+
+	&_today
+		background-color #f4f4f4
+

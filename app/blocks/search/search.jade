@@ -1,0 +1,10 @@
+include ../icon/icon
+
+mixin search()
+    +b.calendar-search
+        +e.SPAN.icon.icon_search
+            +icon('search','','gray-color')(width="15",height="15")
+        +e.input-container(data-calendar="searchContainer")
+            +e.INPUT.input.input_text(data-calendar="search",name="search",autocomplete="off",type="search",id="search",placeholder="Событие, дата или участник")
+            +e.list.modal.hide
+                +e.item-container(data-calendar="searchList")    

@@ -1,0 +1,37 @@
+include ../icon/icon
+
+mixin modal()
+    +b.quick-add-form.modal__.hide(data-calendar="quickForm")
+        +e.SPAN.pointer
+        +b.BUTTON.icon_close._attached._btn(data-calendar="quickFormClose")
+            +icon('close','','gray-color')(width="15",height="15")
+        +b.LABEL.input__label.error.hide(data-calendar="quickFormLabel")
+        +e.INPUT.input.input_text(data-calendar="quickFormInput",data-calendar-validate,name="new",placeholder="1 января, Новый Год",tabindex="1")
+        +e.BUTTON.btn.btn_default._sm(data-calendar="quickFormCreate",tabindex="2") Добавить
+
+    +b.new-event-form.modal__.hide(data-calendar="newEventForm")
+        +e.SPAN.pointer
+        +b.BUTTON.icon_close._attached._btn(data-calendar="newEventFormClose")
+            +icon('close','','gray-color')(width="15",height="15")
+        +b.LABEL.input__label.error.hide(data-calendar="newEventFormLabelWhat")    
+        +e.INPUT.input.input_text(data-calendar="newEventFormInputWhat",data-calendar-validate,name="new",placeholder="Название события",tabindex="1")
+        +e.INPUT.input.input_text(data-calendar="newEventFormInputWho",name="new",placeholder="Имена участников",tabindex="2")
+
+        +e.TEXTAREA.input-area.input_text(data-calendar="newEventFormInputDesc",name="new",placeholder="Описание",rows="5",tabindex="3")
+
+        +e.BUTTON.btn.btn_default._sm(data-calendar="newEventFormSave",tabindex="4") Сохранить 
+        +e.BUTTON.btn.btn_default._sm(data-calendar="newEventFormDelete",tabindex="5") Удалить  
+
+    +b.edit-event-form.modal__.hide(data-calendar="editEventForm")
+        +e.SPAN.pointer
+        +b.BUTTON.icon_close._attached._btn(data-calendar="editEventFormClose")
+            +icon('close','','gray-color')(width="15",height="15")
+        +b.modal-event-info
+            +e.title(data-calendar="editEventFormWhat") Заголовок
+            +e.date(data-calendar="editEventFormWhen") Дата
+            +e.who-title Участники:
+            +e.who(data-calendar="editEventFormWho") Имена
+
+        +e.TEXTAREA.input-area.input_text(data-calendar="editEventFormInputDesc",name="new",placeholder="Описание",rows="5",tabindex="1")
+        +e.BUTTON.btn.btn_default._sm(data-calendar="editEventFormSave",tabindex="2") Сохранить 
+        +e.BUTTON.btn.btn_default._sm(data-calendar="editEventFormDelete",tabindex="3") Удалить   

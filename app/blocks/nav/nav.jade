@@ -1,0 +1,12 @@
+include ../icon/icon
+
+mixin nav()            
+    +b.calendar-nav
+        +e.BUTTON.btn.btn_default._sm(data-calendar="back")
+            +b.SPAN.icon
+                +icon('caret-left','','black-color')(width="10",height="16")
+        +e.label(data-calendar="label") Месяц Год
+        +e.BUTTON.btn.btn_default._sm(data-calendar="next")
+            +b.SPAN.icon
+                +icon('caret-right','','black-color')(width="10",height="16")
+        +e.BUTTON.btn.btn_default._sm(data-calendar="today") Сегодня

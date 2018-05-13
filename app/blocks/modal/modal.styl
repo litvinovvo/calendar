@@ -1,0 +1,73 @@
+.modal
+    position absolute
+    z-index 2
+    padding 25px 30px
+    background-color white
+    box-shadow 0 0 10px rgba(0, 0, 0, .3)
+
+    &__input
+        margin-bottom 5px
+        display block
+        width 100%
+
+    &__input-area
+        margin-top 20px
+        margin-bottom 20px
+        display block
+        width 100%
+
+    &__btn
+        margin-top 10px
+        margin-right 10px
+        display inline-block
+
+    &__pointer
+        position absolute
+        top 0
+        right auto
+        left auto
+        bottom auto
+        width 15px
+        height 15px
+        content ''
+        background-color inherit
+        box-shadow -3px -3px 5px rgba(0, 0, 0, .15)
+        transform translateX(-50%) translateY(-50%) rotate(45deg)
+
+    .modal-event-info
+        padding-right 10px
+        padding-left 10px
+
+        &__title
+            font-size 22px
+            font-weight bold
+
+        &__date
+            margin-top 25px
+            margin-bottom 25px
+
+        &__who-title
+            margin-bottom 10px
+            font-size 14px
+            color #808080
+
+        &__who
+            font-size 18px
+
+.new-event-form
+    width 400px
+
+    +below(750px)
+        width calc(100% - 30px)
+
+.edit-event-form
+    width 400px
+
+    +below(750px)
+        width calc(100% - 30px)
+
+.quick-add-form
+    width 400px
+
+    +below(750px)
+        width calc(100% - 30px)

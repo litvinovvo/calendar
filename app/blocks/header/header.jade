@@ -1,0 +1,10 @@
+include ../search/search
+
+mixin header()
+    +b.header
+        .container
+            +b.header-element_left 
+                +e.BUTTON.btn.btn_primary(data-calendar="addEvent") Добавить
+                +e.BUTTON.btn.btn_primary(data-calendar="refresh") Обновить
+            +b.header-element_right
+                +search()

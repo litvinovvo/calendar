@@ -1,0 +1,27 @@
+.header
+	padding-top 55px
+	padding-bottom 18px
+	display block
+	background-color header-color
+	clearfix()
+	box-shadow 0 0 10px rgba(0, 0, 0, .3)
+
+	&__container
+		container()
+
+	&-element
+		^[1]__btn
+			margin-right 10px
+
+	&-element_left
+		float left
+
+		+below(container-sm-width)
+			margin-bottom 20px
+			float none
+
+	&-element_right
+		float right
+
+		+below(container-sm-width)
+			float none

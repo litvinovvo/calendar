@@ -1,0 +1,12 @@
+extends /blocks/layout-default/layout-default
+include ../blocks/header/header
+include ../blocks/calendar/calendar
+include ../blocks/modal/modal
+
+block head
+    - var pageTitle = 'task calendar';
+
+block content
+    +header()
+    +calendar()
+    +modal()                  
