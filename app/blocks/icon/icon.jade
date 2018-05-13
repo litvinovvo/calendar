@@ -1,7 +1,7 @@
 mixin icon(iconName, isBlock, svgClass)
 	if isBlock
 		svg&attributes(attributes)
-			use(xlink:href='/assets/images/icon.svg#icon_#{iconName}')
+			use(xlink:href=dir + '/assets/images/icon.svg#icon_#{iconName}')
 	else
 		+e('svg')&attributes(attributes)
-			use(xlink:href='/assets/images/icon.svg#icon_#{iconName}' class=svgClass)
+			use(xlink:href=dir + '/assets/images/icon.svg#icon_#{iconName}' class=svgClass)
