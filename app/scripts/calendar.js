@@ -351,18 +351,21 @@ export class Calendar {
         }
     }
     parseMonth(str) {
-        if (str.match(/(январ)/i)) return 0
-        if (str.match(/(феврал)/i)) return 1
-        if (str.match(/(март)/i)) return 2
-        if (str.match(/(апрел)/i)) return 3
-        if (str.match(/(мая|май)/i)) return 4
-        if (str.match(/(июн)/i)) return 5
-        if (str.match(/(июл)/i)) return 6
-        if (str.match(/(август)/i)) return 7
-        if (str.match(/(сентябр)/i)) return 8
-        if (str.match(/(октябр)/i)) return 9
-        if (str.match(/(ноябр)/i)) return 10
-        if (str.match(/(декабр)/i)) return 11
+        const month = {
+            января: 0,
+            февраля: 1,
+            марта: 2,
+            апреля: 3,
+            мая: 4,
+            июня: 5,
+            июля: 6,
+            августа: 7,
+            сентября: 8,
+            октября: 9,
+            ноября: 10,
+            декабря: 11
+        }
+        if (month[str]) return month[str]
         return false
     }
     renderQuickForm = (e) => {
@@ -380,20 +383,53 @@ export class Calendar {
         formEl.classList.remove('hide')
         this.addWatch(this.props.quickForm)
     }
-    getCurrentMonth() {
-        return this.currentDate.toLocaleString('ru', {
-            month: 'long'
-        })[0].toUpperCase() + this.currentDate.toLocaleString('ru', {
-            month: 'long'
-        }).slice(1)
+    getMonthName(num) {
+        const month = {
+            0: 'Январь',
+            1: 'Февраль',
+            2: 'Март',
+            3: 'Апрель',
+            4: 'Май',
+            5: 'Июнь',
+            6: 'Июль',
+            7: 'Aвгуст',
+            8: 'Cентябрь',
+            9: 'Октябрь',
+            10: 'Ноябрь',
+            11: 'Декабрь'
+        }
+        return month[num] ? month[num] : false
     }
-    getCurrentYear() {
-        return this.currentDate.toLocaleString('ru', {
-            year: 'numeric'
-        })
+
+    getDayName(num){
+        const days = {
+            0: 'Воскресенье',
+            1: 'Понедельник',
+            2: 'Вторник',
+            3: 'Среда',
+            4: 'Четверг',
+            5: 'Пятница',
+            6: 'Суббота'
+        }
+        return days[num] ? days[num] : false
     }
+
+    getShortDayName(num){
+        const days = {
+            0: 'Вс',
+            1: 'Пн',
+            2: 'Вт',
+            3: 'Ср',
+            4: 'Чт',
+            5: 'Пт',
+            6: 'Сб'
+        }
+        return days[num] ? days[num] : false
+    }
+
     updateLabel() {
-        this.labelEl.innerHTML = `${this.getCurrentMonth()} ${this.getCurrentYear()}`
+        const day = this.currentDate
+        this.labelEl.innerHTML = `${this.getMonthName(day.getMonth())} ${day.getFullYear()}`
     }
     getLastDayOfMonth(year, month) {
         const date = new Date(year, month + 1, 0)
@@ -423,18 +459,12 @@ export class Calendar {
         event,
         tabindex
     }) {
-        const localDay = date.toLocaleString('ru', {
-            weekday: 'long'
-        })[0].toUpperCase() + date.toLocaleString('ru', {
-            weekday: 'long'
-        }).slice(1)
-        const shortLocalDay = date.toLocaleString('ru', {
-            weekday: 'short'
-        })[0].toUpperCase() + date.toLocaleString('ru', {
-            weekday: 'short'
-        }).slice(1)
-        const whenShort = printLocal ? shortLocalDay + ', ' + date.getDate() : date.getDate()
-        const when = printLocal ? localDay + ', ' + date.getDate() : date.getDate()
+        const dayNum = date.getDay()
+        const dateNum = date.getDate()
+        const localDay = this.getDayName(dayNum)
+        const shortLocalDay = this.getShortDayName(dayNum)
+        const whenShort = printLocal ? shortLocalDay + ', ' + dateNum : dateNum
+        const when = printLocal ? localDay + ', ' + dateNum : dateNum
         const todayClass = active ? 'calendar-day_today' : ''
         const hasEventClass = event ? 'calendar-day_has-event' : ''
         const eventTitle = event ? event.title : ''
@@ -455,7 +485,7 @@ export class Calendar {
     renderMonth(date) {
         if (!this.wasInit) this.init()
         this.updateLabel()
-        // const dateObj = new Date(Number(date))
+
         const day = new Date(Number(date))
         day.setDate(1)
         const dayCount = this.getLastDayOfMonth(day.getFullYear(), day.getMonth())
@@ -474,11 +504,12 @@ export class Calendar {
             tabindex++
         }
         for (let i = 1; i <= dayCount; i++) {
+            const dmy = formatDateDMY(day)
             html += this.renderDay({
                 date: day,
                 printLocal: day.getDate() + dayToFill <= 7,
-                active: formatDateDMY(day) === formatDateDMY(new Date()),
-                event: this.events[formatDateDMY(day)] ? this.events[formatDateDMY(day)] : false,
+                active: dmy === formatDateDMY(new Date()),
+                event: this.events[dmy] ? this.events[dmy] : false,
                 tabindex
             })
             day.setDate(day.getDate() + 1)
