@@ -450,6 +450,7 @@ export class Calendar {
     }
     renderCurrentMonth = () => {
         this.currentDate = new Date()
+        if (this.openForm) this.closeForm(this.openForm)
         this.renderMonth(this.currentDate)
         const today = this.containerEl.querySelector(`[data-calendar-id="${formatDateDMY(this.currentDate)}"]`)
         today.parentNode.focus()
