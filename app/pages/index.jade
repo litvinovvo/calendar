@@ -3,14 +3,14 @@ include ../blocks/header/header
 include ../blocks/calendar/calendar
 include ../blocks/modal/modal
 block meta
-    - var dir = '/calendar'
-    //- - var dir = ''  
+    //- - var dir = '/calendar'
+    - var dir = ''  
 block head
     - var pageTitle = 'task calendar';  
 
 block content
-    - var dir = '/calendar'
-    //- - var dir = ''    
+    //- - var dir = '/calendar'
+    - var dir = ''    
     +header()
     +calendar()
     +modal()                  
