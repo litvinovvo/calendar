@@ -200,7 +200,16 @@ export class Calendar {
     }
     positionAndShowForm(day, formEl) {
         const pointerEl = formEl.querySelector('.modal__pointer')
-        const coords = day.getBoundingClientRect()
+
+        function getCoords(elem) {
+            const box = elem.getBoundingClientRect()
+            return {
+                top: box.top + pageYOffset,
+                left: box.left + pageXOffset
+            }
+        }
+
+        const coords = getCoords(day)
         const clientWidth = document.documentElement.clientWidth
         if (clientWidth <= 750) {
             const top = coords.top + day.offsetHeight
@@ -219,11 +228,12 @@ export class Calendar {
             formEl.style.right = null
             formEl.style.left = left + 'px'
             formEl.style.top = top + 'px'
+            formEl.classList.remove('hide')
             pointerEl.style.right = null
             pointerEl.style.left = day.offsetWidth / 2 + 'px'
-            formEl.classList.remove('hide')
+
         } else {
-            let right = clientWidth - coords.right
+            let right = clientWidth - coords.left - day.offsetWidth
             if (right < 0) right = 0
             const top = coords.top + day.offsetHeight
             formEl.style.left = null
