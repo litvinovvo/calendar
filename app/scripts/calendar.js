@@ -22,6 +22,7 @@ export class Calendar {
         this.addEl = document.querySelector(`[data-calendar="${this.props.add}"]`)
         this.search = document.querySelector(`[data-calendar="${this.props.search}"]`)
         this.currentDate = new Date()
+        this.openForm = false
         this.wasInit = false
         this.quickFormWasInit = false
         this.editEventFormWasInit = false
@@ -125,9 +126,10 @@ export class Calendar {
         if (e.type === 'click') day = e.target.closest('[data-calendar-id]')
         if (e.type === 'keydown') day = e.target.querySelector('[data-calendar-id]')
         if (!day) return
-        this.toggleDayActive(day.dataset.calendarId)
+
         e.stopPropagation()
         if (this.openForm) this.closeForm(this.openForm)
+        this.toggleDayActive(day.dataset.calendarId)
         if (this.events[day.dataset.calendarId]) this.renderEditEventForm(day)
         else this.renderNewEventForm(day)
     }
@@ -138,7 +140,7 @@ export class Calendar {
         const descEl = formEl.querySelector(`[data-calendar="${this.openForm}InputDesc"]`)
         const whatLabelEl = formEl.querySelector(`[data-calendar="${this.openForm}LabelWhat"]`)
         if (e.target.dataset.calendar === `${this.openForm}Save`) {
-            if (whatEl.value === '') {
+            if (whatEl && whatEl.value === '') {
                 whatLabelEl.classList.remove('hide')
                 whatEl.classList.add('error')
                 whatLabelEl.innerHTML = 'Введите название события'
@@ -170,7 +172,7 @@ export class Calendar {
         localStorage.setItem('calendar', JSON.stringify(this.events))
     }
     renderEditEventForm(day) {
-        if (!this.props.editEventFormWasInit) this.initForm(this.props.editEventForm)
+        if (!this.editEventFormWasInit) this.initForm(this.props.editEventForm)
         const formEl = document.querySelector(`[data-calendar="${this.props.editEventForm}"]`)
         const whatEl = formEl.querySelector(`[data-calendar="${this.props.editEventForm}What"]`)
         const whenEl = formEl.querySelector(`[data-calendar="${this.props.editEventForm}When"]`)
@@ -190,7 +192,7 @@ export class Calendar {
         this.addWatch(this.props.editEventForm)
     }
     renderNewEventForm(day) {
-        if (!this.props.newEventFormWasInit) this.initForm(this.props.newEventForm)
+        if (!this.newEventFormWasInit) this.initForm(this.props.newEventForm)
         const formEl = document.querySelector(`[data-calendar="${this.props.newEventForm}"]`)
         formEl.dataset.calendarId = day.dataset.calendarId
         this.positionAndShowForm(day, formEl)
