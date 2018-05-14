@@ -451,11 +451,12 @@ export class Calendar {
     renderCurrentMonth = () => {
         this.currentDate = new Date()
         this.renderMonth(this.currentDate)
+        const today = this.containerEl.querySelector(`[data-calendar-id="${formatDateDMY(this.currentDate)}"]`)
+        today.parentNode.focus()
     }
     renderDay({
         date,
         printLocal,
-        active,
         event,
         tabindex
     }) {
@@ -465,14 +466,13 @@ export class Calendar {
         const shortLocalDay = this.getShortDayName(dayNum)
         const whenShort = printLocal ? shortLocalDay + ', ' + dateNum : dateNum
         const when = printLocal ? localDay + ', ' + dateNum : dateNum
-        const todayClass = active ? 'calendar-day_today' : ''
         const hasEventClass = event ? 'calendar-day_has-event' : ''
         const eventTitle = event ? event.title : ''
         const eventPeople = event ? event.people : ''
         const id = `data-calendar-id='${formatDateDMY(date)}'`
         const html = `
     <div class="calendar__day-wrapper" tabindex="${tabindex}" role="button">
-      <div class="calendar-day ${todayClass} ${hasEventClass}"  ${id} >
+      <div class="calendar-day ${hasEventClass}"  ${id} >
         <div class="calendar-day__when">${when}</div>
         <div class="calendar-day__when_short">${whenShort}</div>
         <div class="calendar-day__what">${eventTitle}</div>
