@@ -61,8 +61,12 @@ class App {
     }
 
     processCloseForm = () => {
-        this.ui.setDayInactive(this.state.activeId)
-        this.ui.closeOpenForm()
+        if(this.ui.getOpenForm()){
+            console.log('close',this.ui.getOpenForm())
+            this.ui.setDayInactive(this.state.activeId)
+            this.ui.closeOpenForm()
+        }
+
     }
 
     processKey = (e) => {
@@ -272,11 +276,12 @@ class App {
         const day = e.target.closest(this.ui.getSelectors().dayId)
 
         if (!day) return
+        this.processCloseForm()
         const id = day.dataset.calendarId
         const event = this.calendar.getEventById(id)
         this.state = {...this.state,activeId: id}
         this.ui.setDayActive(id)
-        this.processCloseForm()
+
 
         if(event){
             const dateObj = this.calendar.stringToDate(id)

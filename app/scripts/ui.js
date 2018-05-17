@@ -108,13 +108,20 @@ export default class UI {
     setDayActive(id){
         const container = document.querySelector(this.selectors.calendarContainer)
         const day = container.querySelector(`[data-calendar-id="${id}"]`)
-        if (day) day.classList.add('calendar__day-wrapper_active')
+        if (day){
+            // console.log('day active',day)
+            day.classList.add('calendar__day-wrapper_active')
+            console.log('day active',day)
+        }
     }
 
     setDayInactive(id){
         const container = document.querySelector(this.selectors.calendarContainer)
         const day = container.querySelector(`[data-calendar-id="${id}"]`)
-        if (day) day.classList.remove('calendar__day-wrapper_active')
+        if (day){
+            day.classList.remove('calendar__day-wrapper_active')
+            console.log('set inactive',day)
+        } 
     }    
 
     resetForm = (form) => {
