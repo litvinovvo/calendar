@@ -50,7 +50,6 @@ export default class UI {
         const whenEl = formEl.querySelector('[data-calendar*="When"]')
         const whoEl = formEl.querySelector('[data-calendar*="Who"]')
         const descEl = formEl.querySelector('[data-calendar*="InputDesc"]')
-        // console.log(event)
 
         whatEl.innerHTML = event.title
         whenEl.innerHTML = genitiveDate
@@ -85,21 +84,15 @@ export default class UI {
 
     openCreateEventForm(dayEl){
         const formEl = document.querySelector(this.selectors.createEventForm)
-
-        // console.log(event)
-        
         this.positionAndShowForm(dayEl,formEl)
-        
         this.state = {...this.state,openForm: 'createEventForm'}
     }    
 
     closeOpenForm = () => {
-        // console.log('in close form',this.selectors[this.state.openForm])
         const formEl = document.querySelector(this.selectors[this.state.openForm])
         if(formEl){
             formEl.classList.add('hide')
             this.resetForm(this.state.openForm)
-            // this.setDayInActive(this.state.openId)
             this.state = {...this.state,openForm: false}
         }
 
@@ -109,9 +102,7 @@ export default class UI {
         const container = document.querySelector(this.selectors.calendarContainer)
         const day = container.querySelector(`[data-calendar-id="${id}"]`)
         if (day){
-            // console.log('day active',day)
             day.classList.add('calendar__day-wrapper_active')
-            console.log('day active',day)
         }
     }
 
@@ -120,7 +111,6 @@ export default class UI {
         const day = container.querySelector(`[data-calendar-id="${id}"]`)
         if (day){
             day.classList.remove('calendar__day-wrapper_active')
-            console.log('set inactive',day)
         } 
     }    
 

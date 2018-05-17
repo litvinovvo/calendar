@@ -18,7 +18,9 @@ export default class Calendar {
 
         delete this.state.events[id]
 
-    }    
+    }
+    
+    
 
     searchEvent(val){
 
@@ -37,9 +39,14 @@ export default class Calendar {
         })
         return result        
     }
+    getCurrentYearMonthDay(){
+        const date = new Date()
+        return {year: date.getFullYear(), month: date.getMonth() + 1,day: date.getDate()}
+    }
 
     getCurrentYearMonth(){
-        return {year: new Date().getFullYear(), month: new Date().getMonth() + 1}
+        const date = new Date()
+        return {year: date.getFullYear(), month: date.getMonth() + 1}
     }
 
     getNextYearMonth({year,month}){

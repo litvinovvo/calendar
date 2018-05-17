@@ -62,11 +62,9 @@ class App {
 
     processCloseForm = () => {
         if(this.ui.getOpenForm()){
-            console.log('close',this.ui.getOpenForm())
             this.ui.setDayInactive(this.state.activeId)
             this.ui.closeOpenForm()
         }
-
     }
 
     processKey = (e) => {
@@ -276,9 +274,11 @@ class App {
         const day = e.target.closest(this.ui.getSelectors().dayId)
 
         if (!day) return
-        this.processCloseForm()
+
         const id = day.dataset.calendarId
         const event = this.calendar.getEventById(id)
+        this.processCloseForm()    
+        this.ui.setDayInactive(this.state.activeId)
         this.state = {...this.state,activeId: id}
         this.ui.setDayActive(id)
 
@@ -306,9 +306,14 @@ class App {
         const currentYM = this.calendar.getCurrentYearMonth()
         const dateLabel = this.calendar.getMonthName(currentYM.month) + ' ' + currentYM.year
         const days = this.calendar.getCalendar(currentYM)
+        const dateObj = this.calendar.getCurrentYearMonthDay()
+        const id = this.calendar.dateToString(dateObj.year,dateObj.month,dateObj.day)
+
+        this.processCloseForm()
         this.ui.renderMonth(days)
+        this.ui.setDayActive(id)
         this.ui.updateLabel(dateLabel)
-        this.state = {...this.state,...currentYM, calendar: days}
+        this.state = {...this.state,...currentYM, calendar: days,activeId: id}
 
     }
     renderNextMonth = () => {        
