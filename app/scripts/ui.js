@@ -155,6 +155,7 @@ export default class UI {
             formEl.style.top = top + 'px'
             formEl.style.left = 15 + 'px'
             formEl.style.right = null
+            formEl.classList.remove('hide')
             pointerEl.style.right = null
             pointerEl.style.left = coords.left + day.offsetWidth / 2 - pointerEl.offsetWidth + 'px'
             return
