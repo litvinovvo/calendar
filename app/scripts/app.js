@@ -15,7 +15,8 @@ class App {
         this.state = {
             active: null,
             year: null,
-            month: null
+            month: null,
+            calendar: null
         }
         this.renderCurrentMonth()
     }
@@ -86,7 +87,7 @@ class App {
         const days = this.calendar.getCalendar(nextYM)
         this.ui.renderMonth(days)
         this.ui.updateLabel(dateLabel)
-        this.state = {...this.state,...nextYM} 
+        this.state = {...this.state,...nextYM, calendar: days} 
 
         this.editDayById(id)
     }    
@@ -168,7 +169,8 @@ class App {
 
         this.ui.closeOpenForm()
         const dateObj = this.calendar.stringToDate(id)
-        if(dateObj.month === this.state.month.toString() && dateObj.year === this.state.year.toString())this.updateMonth()    
+        this.state.calendar.some((day)=>day.id == id)
+        if(this.state.calendar.some((day)=>day.id == id))this.updateMonth()    
     
     }
 
@@ -211,7 +213,8 @@ class App {
         this.store.saveCalendar(this.calendar.getAllEvents())
         this.ui.closeOpenForm()
         const dateObj = this.calendar.stringToDate(id)
-        if(dateObj.month === this.state.month.toString() && dateObj.year === this.state.year.toString())this.updateMonth()
+        if(this.state.calendar.some((day)=>day.id == id))this.updateMonth()  
+        // if(dateObj.month === this.state.month.toString() && dateObj.year === this.state.year.toString())this.updateMonth()
     }    
 
     processRemoveEditEventForm = () => {
@@ -220,7 +223,8 @@ class App {
         this.calendar.removeEvent(id)
         this.ui.closeOpenForm()
         const dateObj = this.calendar.stringToDate(id)
-        if(dateObj.month === this.state.month.toString() && dateObj.year === this.state.year.toString())this.updateMonth()
+        if(this.state.calendar.some((day)=>day.id == id))this.updateMonth()  
+        // if(dateObj.month === this.state.month.toString() && dateObj.year === this.state.year.toString())this.updateMonth()
         
     }    
 
@@ -294,7 +298,7 @@ class App {
         const days = this.calendar.getCalendar(currentYM)
         this.ui.renderMonth(days)
         this.ui.updateLabel(dateLabel)
-        this.state = {...this.state,...currentYM}
+        this.state = {...this.state,...currentYM, calendar: days}
 
     }
     renderNextMonth = () => {        
@@ -303,7 +307,7 @@ class App {
         const days = this.calendar.getCalendar(nextYM)
         this.ui.renderMonth(days)
         this.ui.updateLabel(dateLabel)
-        this.state = {...this.state,...nextYM}        
+        this.state = {...this.state,...nextYM, calendar: days}        
     }
     renderPreviousMonth = () => {
         const prevYM = this.calendar.getPreviousYearMonth({year: this.state.year, month: this.state.month})
@@ -311,7 +315,7 @@ class App {
         const days = this.calendar.getCalendar(prevYM)
         this.ui.renderMonth(days)
         this.ui.updateLabel(dateLabel)
-        this.state = {...this.state,...prevYM}    
+        this.state = {...this.state,...prevYM, calendar: days}    
     }  
 
 }

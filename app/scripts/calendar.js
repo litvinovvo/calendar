@@ -1,29 +1,27 @@
 
 export default class Calendar {
     constructor(store = {}){
-        // this.currentMonth = new Date().getMonth() + 1
-        // this.currentYear = new Date().getFullYear()
-        console.log(store)
+
         this.state = {
             events: {...store}
         }
-        console.log(this.state.events)
+
     }
 
     createEvent(event){
-        // console.log(this.state.events)
+
         this.state.events[event.id] = event
-        // console.log(this.state.events)
+
     }
 
     removeEvent(id){
-        console.log(this.state.events)
+
         delete this.state.events[id]
-        console.log(this.state.events)
+
     }    
 
     searchEvent(val){
-        // console.log('search',str)
+
         const str = val.toLowerCase()
         const eventsArr = mapToArrJs(this.state.events)
         const result = []
@@ -46,19 +44,17 @@ export default class Calendar {
 
     getNextYearMonth({year,month}){
         const nextDate = new Date(year,month)
-        // console.log(year,month,nextDate)
         return {year: nextDate.getFullYear(), month: nextDate.getMonth() + 1}
     }
 
     getPreviousYearMonth({year,month}){
         const prevDate = new Date(year,month - 2)
-        // console.log(year,month,nextDate)
         return {year: prevDate.getFullYear(), month: prevDate.getMonth() + 1}
     }    
 
     validDate(year,month,day = 1){
         const date = new Date(year,month - 1,day)
-        console.log(date)
+
         if(date.getFullYear() !== Number(year) || date.getMonth()+1 !== Number(month) || date.getDate() !== Number(day))return false
         return true
     }
@@ -68,15 +64,13 @@ export default class Calendar {
             console.error('incorrect date')
             return false
         }
-        // console.log(this.state)
+
         const daysInMonth = this.getLastDayOfMonth(year,month)
         const daysInPrevMonth = this.getLastDayOfMonth(year,month + 1)
 
         const daysToFillBefore = this.getDayOfWeek(year,month,1) - 1
         const daysToFillAfter = 7 - this.getDayOfWeek(year,month,daysInMonth)
 
-
-        // console.log(year,month,daysInMonth,daysToFillBefore)
         const calendar = []
         for(let i=daysInPrevMonth;i+daysToFillBefore > daysInPrevMonth;i--){
             const dayOfWeek = this.getDayOfWeek(year,month-1,i)
