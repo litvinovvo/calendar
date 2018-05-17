@@ -17,7 +17,7 @@ export default class UI {
         }
         this.state = {
             openForm: false,
-            id: null
+            // openId: null
         }
 
     }
@@ -59,7 +59,7 @@ export default class UI {
         
         this.positionAndShowForm(dayEl,formEl)
         
-        this.state = {...this.state,openForm: 'editEventForm',id: dayEl.dataset.calendarId}
+        this.state = {...this.state,openForm: 'editEventForm'}
     }
 
     openQuickForm(){
@@ -90,7 +90,7 @@ export default class UI {
         
         this.positionAndShowForm(dayEl,formEl)
         
-        this.state = {...this.state,openForm: 'createEventForm', id: dayEl.dataset.calendarId}
+        this.state = {...this.state,openForm: 'createEventForm'}
     }    
 
     closeOpenForm = () => {
@@ -99,7 +99,7 @@ export default class UI {
         if(formEl){
             formEl.classList.add('hide')
             this.resetForm(this.state.openForm)
-            this.setDayInActive(this.state.id)
+            // this.setDayInActive(this.state.openId)
             this.state = {...this.state,openForm: false}
         }
 
@@ -111,8 +111,7 @@ export default class UI {
         if (day) day.classList.add('calendar__day-wrapper_active')
     }
 
-    setDayInActive(id){
-        console.log('to inactive',id)
+    setDayInactive(id){
         const container = document.querySelector(this.selectors.calendarContainer)
         const day = container.querySelector(`[data-calendar-id="${id}"]`)
         if (day) day.classList.remove('calendar__day-wrapper_active')

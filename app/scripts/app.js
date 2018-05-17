@@ -13,7 +13,7 @@ class App {
         this.ui = new UI()
         this.setEventListeners()
         this.state = {
-            active: null,
+            activeId: null,
             year: null,
             month: null,
             calendar: null
@@ -37,17 +37,17 @@ class App {
         document.addEventListener('click',this.watchOutFormClick)
 
         //edit form
-        document.querySelector(this.ui.getSelectors().editEventForm).querySelector('[data-calendar*="Close"]').addEventListener('click',this.ui.closeOpenForm)
+        document.querySelector(this.ui.getSelectors().editEventForm).querySelector('[data-calendar*="Close"]').addEventListener('click',this.processCloseForm)
         document.querySelector(this.ui.getSelectors().editEventForm).querySelector('[data-calendar*="Save"]').addEventListener('click',this.processSaveEditEventForm)
         document.querySelector(this.ui.getSelectors().editEventForm).querySelector('[data-calendar*="Delete"]').addEventListener('click',this.processRemoveEditEventForm)
 
         //create form
-        document.querySelector(this.ui.getSelectors().createEventForm).querySelector('[data-calendar*="Close"]').addEventListener('click',this.ui.closeOpenForm)
+        document.querySelector(this.ui.getSelectors().createEventForm).querySelector('[data-calendar*="Close"]').addEventListener('click',this.processCloseForm)
         document.querySelector(this.ui.getSelectors().createEventForm).querySelector('[data-calendar*="Save"]').addEventListener('click',this.processSaveCreateEventForm)
 
         //quick form
         document.querySelector(this.ui.getSelectors().quickAddBtn).addEventListener('click',this.quickAddEvent)
-        document.querySelector(this.ui.getSelectors().quickEventForm).querySelector('[data-calendar*="Close"]').addEventListener('click',this.ui.closeOpenForm)
+        document.querySelector(this.ui.getSelectors().quickEventForm).querySelector('[data-calendar*="Close"]').addEventListener('click',this.processCloseForm)
         document.querySelector(this.ui.getSelectors().quickEventForm).querySelector('[data-calendar*="Create"]').addEventListener('click',this.processQuickForm)        
 
         //search
@@ -60,9 +60,14 @@ class App {
 
     }
 
+    processCloseForm = () => {
+        this.ui.setDayInactive(this.state.activeId)
+        this.ui.closeOpenForm()
+    }
+
     processKey = (e) => {
         const code = e.which
-        if (code === 9 && this.ui.getOpenForm()) this.ui.closeOpenForm()
+        if (code === 9 && this.ui.getOpenForm()) this.processCloseForm()
         if (code === 13 || code === 32) this.editDay(e)
     }
 
@@ -106,7 +111,6 @@ class App {
     }
   
     processQuickForm = () => {
-        console.log('process q f')
 
         const formEl = document.querySelector(this.ui.getSelectors().quickEventForm)
         const inputEl = formEl.querySelector('[data-calendar*="Input"]')
@@ -146,7 +150,6 @@ class App {
             return
         }
         const id = this.calendar.dateToString(this.state.year,parseMonth(result[2]),result[1])
-        console.log(id,this.state.year,parseMonth(result[2]),result[1])
 
         if (!this.calendar.validDate(this.state.year,parseMonth(result[2]),result[1])) {
             setError('Такой даты не существует')
@@ -157,19 +160,20 @@ class App {
             return
         }
 
-        this.calendar.createEvent({
+        const newEvent = {
             id: id,
             date: id,
             title: inputEl.value,
             people: '',
-            description: ''
-        })
+            description: ''            
+        }
 
-        this.store.saveCalendar(this.calendar.getAllEvents())
+        this.calendar.createEvent(newEvent)
 
-        this.ui.closeOpenForm()
+        this.store.createEvent(newEvent)
+
+        this.processCloseForm()
         const dateObj = this.calendar.stringToDate(id)
-        this.state.calendar.some((day)=>day.id == id)
         if(this.state.calendar.some((day)=>day.id == id))this.updateMonth()    
     
     }
@@ -178,12 +182,13 @@ class App {
         
         const formEl = document.querySelector(this.ui.getSelectors().editEventForm)
         const inputDesc = formEl.querySelector('[data-calendar*="InputDesc"]')
-        const id = this.state.active
+        const id = this.state.activeId
         const event = this.calendar.getEventById(id)
-        console.log({...event,description: inputDesc.value})
-        this.calendar.createEvent({...event,description: inputDesc.value})
-        this.store.saveCalendar(this.calendar.getAllEvents())
-        this.ui.closeOpenForm()
+
+        const newEvent = {...event,description: inputDesc.value}
+        this.calendar.createEvent(newEvent)
+        this.store.updateEvent(newEvent)
+        this.processCloseForm()
     }
 
     processSaveCreateEventForm = () => {
@@ -201,30 +206,30 @@ class App {
             return
         }
 
-        const id = this.state.active
+        const id = this.state.activeId
 
-        this.calendar.createEvent({
+        const newEvent = {
             id: id,
             date: id,
             title: inputWhat.value,
             people: inputWho.value,
-            description: inputDesc.value 
-        })
-        this.store.saveCalendar(this.calendar.getAllEvents())
-        this.ui.closeOpenForm()
+            description: inputDesc.value             
+        }
+        this.calendar.createEvent(newEvent)
+        this.store.createEvent(newEvent)
+        this.processCloseForm()
         const dateObj = this.calendar.stringToDate(id)
         if(this.state.calendar.some((day)=>day.id == id))this.updateMonth()  
-        // if(dateObj.month === this.state.month.toString() && dateObj.year === this.state.year.toString())this.updateMonth()
     }    
 
     processRemoveEditEventForm = () => {
         
-        const id = this.state.active
+        const id = this.state.activeId
         this.calendar.removeEvent(id)
-        this.ui.closeOpenForm()
+        this.store.removeEvent(id)
+        this.processCloseForm()
         const dateObj = this.calendar.stringToDate(id)
         if(this.state.calendar.some((day)=>day.id == id))this.updateMonth()  
-        // if(dateObj.month === this.state.month.toString() && dateObj.year === this.state.year.toString())this.updateMonth()
         
     }    
 
@@ -232,14 +237,14 @@ class App {
         
         if(this.ui.getOpenForm()){
 
-            if(!e.target.closest(this.ui.getSelectors()[this.ui.getOpenForm()]))this.ui.closeOpenForm()
+            if(!e.target.closest(this.ui.getSelectors()[this.ui.getOpenForm()]))this.processCloseForm()
         }
 
     }
 
     quickAddEvent = (e) => {
         e.stopPropagation()
-        this.ui.closeOpenForm()
+        this.processCloseForm()
         this.ui.openQuickForm()
   
     }
@@ -249,8 +254,8 @@ class App {
         const day = container.querySelector(this.ui.getSelectors().haveId(id))
         if(!day)return false
         
-        this.state = {...this.state,active: id}
-        this.ui.closeOpenForm()
+        this.state = {...this.state,activeId: id}
+        this.processCloseForm()
         this.ui.setDayActive(id)
 
         const event = this.calendar.getEventById(id)
@@ -269,9 +274,9 @@ class App {
         if (!day) return
         const id = day.dataset.calendarId
         const event = this.calendar.getEventById(id)
-        this.state = {...this.state,active: id}
+        this.state = {...this.state,activeId: id}
         this.ui.setDayActive(id)
-        this.ui.closeOpenForm()
+        this.processCloseForm()
 
         if(event){
             const dateObj = this.calendar.stringToDate(id)
