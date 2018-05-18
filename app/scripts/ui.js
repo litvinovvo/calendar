@@ -165,6 +165,10 @@ export default class UI {
             formEl.style.top = top + 'px'
             pointerEl.style.right = null
             formEl.classList.remove('hide')
+            if(clientWidth !== document.documentElement.clientWidth){
+                const diff = document.documentElement.clientWidth - clientWidth
+                formEl.style.left = left + diff/2 + 'px'
+            }
             pointerEl.style.left = day.offsetWidth / 2 + 'px'
 
         } else {
@@ -176,6 +180,10 @@ export default class UI {
             formEl.style.top = top + 'px'
             pointerEl.style.left = null
             formEl.classList.remove('hide')
+            if(clientWidth !== document.documentElement.clientWidth){
+                const diff = document.documentElement.clientWidth - clientWidth
+                formEl.style.right = right + diff/2 + 'px'
+            }        
             pointerEl.style.right = day.offsetWidth / 2 - pointerEl.offsetWidth + 'px'
         }
     }
